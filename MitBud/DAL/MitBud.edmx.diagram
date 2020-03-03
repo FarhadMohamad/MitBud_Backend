@@ -4,18 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="386241cb1d264cc5a06f72d843f9ec26" Name="Diagram1">
+      <Diagram DiagramId="d965231f013d4e128577005c45943147" Name="Diagram1">
         <EntityTypeShape EntityType="MitBudDBModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.AspNetRole" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.AspNetUser" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.Category" Width="1.5" PointX="5.25" PointY="16.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.Client" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.Company" Width="1.5" PointX="5.25" PointY="11.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.Company_Category" Width="1.5" PointX="7.5" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MitBudDBModel.Task" Width="1.5" PointX="7.5" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.AspNetRole" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.AspNetUser" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.Category" Width="1.5" PointX="5.25" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.Client" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.Company" Width="1.5" PointX="5.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.Company_Category" Width="1.5" PointX="7.5" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.Conversation" Width="1.5" PointX="7.5" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.sysdiagram" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MitBudDBModel.Task" Width="1.5" PointX="7.5" PointY="7.375" IsExpanded="true" />
         <AssociationConnector Association="MitBudDBModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.FK_Client_AspNetUsers" ManuallyRouted="false" />
@@ -23,9 +24,8 @@
         <AssociationConnector Association="MitBudDBModel.FK_Company_Category_Category" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.FK_Task_Client" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.FK_Category_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="MitBudDBModel.FK_Conversation_Company" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MitBudDBModel.Conversation" Width="1.5" PointX="7.5" PointY="15" />
-        <AssociationConnector Association="MitBudDBModel.FK_Conversation_Company" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

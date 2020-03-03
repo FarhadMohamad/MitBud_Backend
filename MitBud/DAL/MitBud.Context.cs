@@ -34,8 +34,8 @@ namespace MitBud.DAL
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Company_Category> Company_Category { get; set; }
+        public virtual DbSet<Conversation> Conversations { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
-        public virtual DbSet<Conversation> Conversations { get; set; }
     }
 }

@@ -356,8 +356,8 @@ namespace MitBud.Controllers
 
         // POST api/Account/Register
         [AllowAnonymous]
-        [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        [Route("Register_Company")]
+        public async Task<IHttpActionResult> Register(RegisterCompany model)
         {
             if (!ModelState.IsValid)
             {
@@ -389,7 +389,7 @@ namespace MitBud.Controllers
         // POST api/Account/Register_client
         [AllowAnonymous]
         [Route("Register_client")]
-        public async Task<IHttpActionResult> Register_client(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register_client(RegisterClient model)
         {
             if (!ModelState.IsValid)
             {
