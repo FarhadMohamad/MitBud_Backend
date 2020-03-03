@@ -135,6 +135,27 @@ namespace MitBud.Controllers
             return Ok();
         }
 
+
+        // POST api/Account/ChangePassword
+        [Route("ChangePasswordOnEmail")]
+        public async Task<IHttpActionResult> ChangePasswordOnEmail(ChangePasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
         // POST api/Account/SetPassword
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
@@ -357,7 +378,7 @@ namespace MitBud.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register_Company")]
-        public async Task<IHttpActionResult> Register(RegisterCompany model)
+        public async Task<IHttpActionResult> Register_Company(RegisterCompany model)
         {
             if (!ModelState.IsValid)
             {

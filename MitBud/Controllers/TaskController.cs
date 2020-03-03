@@ -19,11 +19,42 @@ namespace MitBud.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Authorize]
-        [System.Web.Http.Route("api/SaveTask")]
-        public async Task<HttpResponseMessage> SaveTask(TaskViewModel taskViewModel)
+        [System.Web.Http.Route("api/SaveTaskLoggedIn")]
+        public async Task<HttpResponseMessage> SaveTaskLoggedIn(TaskViewModel taskViewModel)
         {
+            
             var userId = RequestContext.Principal.Identity.GetUserId();
-            TaskProvider.SaveTask(taskViewModel, userId);
+
+            if (userId != null)
+            {
+                TaskProvider.SaveTaskLoggedIn(taskViewModel, userId);
+
+                var dd = HttpStatusCode.Accepted;
+                var responseMsg = new HttpResponseMessage(dd)
+                {
+                    Content = new StringContent("", Encoding.UTF8, "application/json")
+                };
+
+                sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
+
+            }
+
+            else
+            {
+                SaveTaskNewUser(taskViewModel);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK);
+
+        }
+
+
+        [System.Web.Http.HttpPost]
+        //[System.Web.Http.Authorize]
+        [System.Web.Http.Route("api/SaveTaskNewUser")]
+        public async Task<HttpResponseMessage> SaveTaskNewUser(TaskViewModel taskViewModel)
+        {
+            //var userId = RequestContext.Principal.Identity.GetUserId();
+            TaskProvider.SaveTask(taskViewModel);
 
             var dd = HttpStatusCode.Accepted;
             var responseMsg = new HttpResponseMessage(dd)
@@ -36,6 +67,12 @@ namespace MitBud.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
 
         }
+
+
+
+
+
+
 
         [AllowAnonymous]
         [Route("sendVerificationByMail")]
