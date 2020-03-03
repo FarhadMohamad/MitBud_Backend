@@ -9,7 +9,7 @@ namespace MitBud.Providers
 {
     public class CompanyProvider
     {
-        public static void SaveCompanyInfo(RegisterBindingModel registerViewModel, string UserId)
+        public static void SaveCompanyInfo(RegisterCompany registerViewModel, string UserId)
         {
             MitBudDBEntities db = new MitBudDBEntities();
             Company company = new Company();
@@ -29,7 +29,7 @@ namespace MitBud.Providers
 
         }
 
-        public static void SaveCategory(RegisterBindingModel registerViewModel, string UserId)
+        public static void SaveCategory(RegisterCompany registerViewModel, string UserId)
         {
             MitBudDBEntities db = new MitBudDBEntities();
             Company_Category company_category = new Company_Category();

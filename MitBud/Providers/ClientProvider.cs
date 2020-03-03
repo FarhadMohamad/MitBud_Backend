@@ -9,7 +9,7 @@ namespace MitBud.Providers
 {
     public class ClientProvider
     {
-        public static void SaveClientInfo(RegisterBindingModel registerViewModel, string UserId)
+        public static void SaveClientInfo(RegisterClient registerViewModel, string UserId)
         {
             MitBudDBEntities db = new MitBudDBEntities();
             Client client = new Client();
