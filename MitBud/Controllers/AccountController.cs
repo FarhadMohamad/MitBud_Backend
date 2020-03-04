@@ -419,7 +419,10 @@ namespace MitBud.Controllers
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            var result = await manager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {

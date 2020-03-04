@@ -27,7 +27,7 @@ namespace MitBud.Controllers
 
             if (userId != null)
             {
-                TaskProvider.SaveTaskLoggedIn(taskViewModel, userId);
+                //TaskProvider.SaveTaskLoggedIn(taskViewModel, userId);
 
                 var dd = HttpStatusCode.Accepted;
                 var responseMsg = new HttpResponseMessage(dd)

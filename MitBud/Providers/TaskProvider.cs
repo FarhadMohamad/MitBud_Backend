@@ -7,6 +7,7 @@ using MitBud.DAL;
 using Microsoft.AspNetCore.Identity;
 using MitBud.Controllers;
 using Microsoft.AspNet.Identity;
+using System.Web.Http;
 
 namespace MitBud.Providers
 {
@@ -17,6 +18,7 @@ namespace MitBud.Providers
         //Save Tasks to the database to the Tasks table
         public static void SaveTaskLoggedIn(TaskViewModel TaskViewModel, string userId)
         {
+            GenerateRandomPassword();
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
             Task.Title = TaskViewModel.Title;
@@ -37,17 +39,68 @@ namespace MitBud.Providers
         }
 
         //Save Tasks to the database to the Tasks table
+        //public  static void SaveTask(TaskViewModel TaskViewModel)
+        //{
+        //    MitBudDBEntities db = new MitBudDBEntities();
+        //    AspNetUser asp = new AspNetUser();
+        //    Task Task = new Task();
+        //    AccountController account = new AccountController();
+         
+        //    RegisterClient r = new RegisterClient();
+        //    var s = r;
+        //    s.Name = TaskViewModel.ClientName;
+        //    s.Email = TaskViewModel.ClientEmail;
+        //    s.Password = "ATMARr123.";
+        //    s.ConfirmPassword = "ATMARr123.";
+        //    account.Register_client(r);
+          
+
+
+
+
+        //    Task.Title = TaskViewModel.Title;
+           
+     
+        //    Task.Description = TaskViewModel.Description;
+        //    Task.Category = TaskViewModel.Category;
+        //    Task.ClientName = TaskViewModel.ClientName;
+        //    Task.ClientAddress = TaskViewModel.ClientName;
+        //    Task.ClientPostCode = TaskViewModel.ClientPostCode;
+        //    Task.ClientTelephone = TaskViewModel.ClientTelephone;
+        //    Task.ClientEmail = TaskViewModel.ClientEmail;
+        //    Task.WhoAreYou = TaskViewModel.WhoAreYou;
+        //    Task.TaskCost = TaskViewModel.TaskCost;
+        //    db.Tasks.Add(Task);
+        //    db.SaveChanges();
+
+
+        //}
+
+
         public static void SaveTask(TaskViewModel TaskViewModel)
         {
-            MitBudDBEntities db = new MitBudDBEntities();
-            AspNetUser asp = new AspNetUser();
-            Task Task = new Task();
-            Task.Title = TaskViewModel.Title;
+           
+   
             AccountController account = new AccountController();
 
-            GenerateRandomPassword();
-             //account.Register_client();
-            //Task.Client_id = userId;
+
+
+            RegisterClient r = new RegisterClient();
+            var s = r;
+           
+            s.Email = TaskViewModel.ClientEmail;
+            s.Password = "ATMARr123.";
+            s.ConfirmPassword = "ATMARr123.";
+
+            account.Register_client(r);
+
+
+
+
+            MitBudDBEntities db = new MitBudDBEntities();
+            Task Task = new Task();
+
+            Task.Title = TaskViewModel.Title;
             Task.Description = TaskViewModel.Description;
             Task.Category = TaskViewModel.Category;
             Task.ClientName = TaskViewModel.ClientName;
@@ -59,6 +112,9 @@ namespace MitBud.Providers
             Task.TaskCost = TaskViewModel.TaskCost;
             db.Tasks.Add(Task);
             db.SaveChanges();
+
+
+
 
 
         }
