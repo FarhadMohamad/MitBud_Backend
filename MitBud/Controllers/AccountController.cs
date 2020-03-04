@@ -20,7 +20,7 @@ using MitBud.Results;
 
 namespace MitBud.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -115,44 +115,48 @@ namespace MitBud.Controllers
             };
         }
 
-        // POST api/Account/ChangePassword
-        [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// POST api/Account/ChangePassword
+        //[Route("ChangePassword")]
+        //public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
+        //    //IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+        //        model.NewPassword);
             
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
+        //    if (!result.Succeeded)
+        //    {
+        //        return GetErrorResult(result);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
-
-        // POST api/Account/ChangePassword
-        [Route("ChangePasswordOnEmail")]
-        public async Task<IHttpActionResult> ChangePasswordOnEmail(ChangePasswordBindingModel model)
+      
+        //
+        // POST: /Account/ResetPassword
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Mvc.ValidateAntiForgeryToken]
+        [System.Web.Http.Route("ResetPassword")]
+        public async Task<IHttpActionResult> ResetPassword(ChangePasswordBindingModel model)
         {
+            //var id = "209e647e-fa90-487d-9f20-6b9fdf4c01d8";
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
-
+            var result = await UserManager.ResetPasswordAsync(user.Id, code, model.NewPassword);
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
-
             return Ok();
         }
 
@@ -174,6 +178,23 @@ namespace MitBud.Controllers
 
             return Ok();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
@@ -407,6 +428,7 @@ namespace MitBud.Controllers
             return Ok();
         }
 
+
         // POST api/Account/Register_client
         [AllowAnonymous]
         [Route("Register_client")]
@@ -423,7 +445,7 @@ namespace MitBud.Controllers
             //IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             var result = await manager.CreateAsync(user, model.Password);
-
+            
             if (result.Succeeded)
             {
                 var UserId = UserManager.FindByEmail(model.Email);
