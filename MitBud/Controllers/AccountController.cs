@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,16 +14,18 @@ using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using MitBud.DAL;
 using MitBud.Models;
 using MitBud.Providers;
 using MitBud.Results;
 
 namespace MitBud.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -126,39 +131,15 @@ namespace MitBud.Controllers
 
         //    //IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
         //        model.NewPassword);
-            
+
         //    if (!result.Succeeded)
         //    {
         //        return GetErrorResult(result);
         //    }
 
         //    return Ok();
-        //}
+        //}     
 
-      
-        //
-        // POST: /Account/ResetPassword
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.AllowAnonymous]
-        [System.Web.Mvc.ValidateAntiForgeryToken]
-        [System.Web.Http.Route("ResetPassword")]
-        public async Task<IHttpActionResult> ResetPassword(ChangePasswordBindingModel model)
-        {
-            //var id = "209e647e-fa90-487d-9f20-6b9fdf4c01d8";
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var user = await UserManager.FindByEmailAsync(model.Email);
-            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-
-            var result = await UserManager.ResetPasswordAsync(user.Id, code, model.NewPassword);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-            return Ok();
-        }
 
         // POST api/Account/SetPassword
         [Route("SetPassword")]
@@ -429,28 +410,77 @@ namespace MitBud.Controllers
         }
 
 
-        // POST api/Account/Register_client
-        [AllowAnonymous]
-        [Route("Register_client")]
-        public async Task<IHttpActionResult> Register_client(RegisterClient model)
-        {
+        //// POST api/Account/Register_client
+        //[AllowAnonymous]
+        //[Route("Register_client")]
+        //public async Task<IHttpActionResult> Register_client(RegisterClient model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+
+        //    //var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+        //    IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+        //    //var result = await manager.CreateAsync(user, model.Password);
+            
+        //    if (result.Succeeded)
+        //    {
+        //        var UserId = UserManager.FindByEmail(model.Email);
+                
+        //        ClientProvider.SaveClientInfo(model, UserId.Id);
+        //        UserManager.AddToRole(UserId.Id, "Client");
+
+        //    }
+
+        //    if (!result.Succeeded)
+        //    {
+        //        return GetErrorResult(result);
+        //    }
+
+        //    return Ok();
+        //}
+
+
+        [System.Web.Http.HttpPost]
+        //[System.Web.Http.Authorize]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Mvc.ValidateAntiForgeryToken]
+        [System.Web.Http.Route("SaveTaskNewUser")]
+        public async Task<IHttpActionResult> SaveTaskNotLoggedIn(TaskViewModel taskViewModel)
+        {   
+
+
+            TaskProvider.SaveTask(taskViewModel);
+            
+            var randomPass = GenerateRandomPassword();
+            AccountController account = new AccountController();
+
+            RegisterClient r = new RegisterClient();
+            r.Email = taskViewModel.ClientEmail;
+            r.Password = randomPass;
+            r.ConfirmPassword = randomPass;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName = taskViewModel.ClientEmail, Email = taskViewModel.ClientEmail };
 
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-            //IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            //var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            IdentityResult result = await UserManager.CreateAsync(user, randomPass);
 
-            var result = await manager.CreateAsync(user, model.Password);
-            
+            //var result = await manager.CreateAsync(user, model.Password);
+
             if (result.Succeeded)
             {
-                var UserId = UserManager.FindByEmail(model.Email);
-                
-                ClientProvider.SaveClientInfo(model, UserId.Id);
+                var UserId = UserManager.FindByEmail(taskViewModel.ClientEmail);
+
+                ClientProvider.SaveClientInfo(taskViewModel.ClientName, taskViewModel.ClientEmail, UserId.Id);
                 UserManager.AddToRole(UserId.Id, "Client");
 
             }
@@ -460,8 +490,184 @@ namespace MitBud.Controllers
                 return GetErrorResult(result);
             }
 
+
+           // IHttpActionResult httpActionResult = await account.Register_client(r);
+
+
+            var dd = HttpStatusCode.Accepted;
+            var responseMsg = new HttpResponseMessage(dd)
+            {
+                Content = new StringContent("", Encoding.UTF8, "application/json")
+            };
+            AccountController a = new AccountController();
+
+            MitBudDBEntities mb = new MitBudDBEntities();
+
+
+            var req = mb.AspNetUsers.Where(x => x.Email == taskViewModel.ClientEmail).SingleOrDefault();
+
+
+            //var token = a.generateToken(taskViewModel.ClientEmail, req.Id);
+
+
+
+            //var user = await a.UserManager.FindByEmailAsync("teethss@t.com");
+            string code = await UserManager.GeneratePasswordResetTokenAsync(req.Id);
+            SendPasswordResetEmail(taskViewModel.ClientEmail, taskViewModel.ClientName, code);
+
+            return Ok();
+
+        }
+
+        // POST: /Account/ResetPassword
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Mvc.ValidateAntiForgeryToken]
+        [System.Web.Http.Route("CreatePassword")]
+        public async Task<IHttpActionResult> CreatePassword(CreatePasswordBindingModel model)
+        {
+
+            MitBudDBEntities mb = new MitBudDBEntities();
+
+            var req = mb.AspNetUsers.Where(x => x.Email == model.Email).SingleOrDefault();
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            var result = await UserManager.ResetPasswordAsync(req.Id, model.Code, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
             return Ok();
         }
+
+
+        // GET: /Account/ResetPassword
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Mvc.ValidateAntiForgeryToken]
+        [System.Web.Http.Route("CreatePassword")]
+        public async Task<HttpResponseMessage> CreatePassword()
+        {
+
+           return Request.CreateResponse(HttpStatusCode.OK);
+        }
+      
+
+        [AllowAnonymous]
+        [Route("sendVerificationByMail")]
+        public static void SendPasswordResetEmail(string ToEmail, string UserName, string token)
+        {
+            //MailAddress address = new MailAddress(email);
+            //string username = address.User;
+
+            try
+            {
+
+                SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
+                var mail = new System.Net.Mail.MailMessage();
+                mail.From = new MailAddress("atmar@hotmail.dk");
+                mail.To.Add(ToEmail);
+                mail.Subject = "Your Authorization code.";
+                mail.IsBodyHtml = true;
+                string htmlBody;
+                htmlBody = "Hi " + UserName + "," + "<br />" + "<br />"
+                    + "This is an automatically generated email only to notify you – please do not reply to it." + "<br />" + "<br />"
+                    + "http://localhost:60355/api/Account/CreatePassword?token=" + token + "<br />" + "<br />"
+                    + "Regards, " + "<br />"
+                    + "MitBud.";
+                mail.Body = htmlBody;
+                SmtpServer.Port = 587;
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Credentials = new NetworkCredential("atmar@hotmail.dk", "mursal1506", "Outlook.com");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+
+                //return "sent";
+            }
+            catch (Exception ex)
+            {
+
+                //ex.Message;
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+        public static string GenerateRandomPassword(Microsoft.AspNetCore.Identity.PasswordOptions opts = null)
+        {
+            if (opts == null) opts = new Microsoft.AspNetCore.Identity.PasswordOptions()
+            {
+                RequiredLength = 8,
+                RequiredUniqueChars = 4,
+                RequireDigit = true,
+                RequireLowercase = true,
+                RequireNonAlphanumeric = true,
+                RequireUppercase = true
+            };
+
+            string[] randomChars = new[] {
+            "ABCDEFGHJKLMNOPQRSTUVWXYZ",    // uppercase 
+            "abcdefghijkmnopqrstuvwxyz",    // lowercase
+            "0123456789",                   // digits
+            "!@$?_-"                        // non-alphanumeric
+        };
+
+            Random rand = new Random(Environment.TickCount);
+            List<char> chars = new List<char>();
+
+            if (opts.RequireUppercase)
+                chars.Insert(rand.Next(0, chars.Count),
+                    randomChars[0][rand.Next(0, randomChars[0].Length)]);
+
+            if (opts.RequireLowercase)
+                chars.Insert(rand.Next(0, chars.Count),
+                    randomChars[1][rand.Next(0, randomChars[1].Length)]);
+
+            if (opts.RequireDigit)
+                chars.Insert(rand.Next(0, chars.Count),
+                    randomChars[2][rand.Next(0, randomChars[2].Length)]);
+
+            if (opts.RequireNonAlphanumeric)
+                chars.Insert(rand.Next(0, chars.Count),
+                    randomChars[3][rand.Next(0, randomChars[3].Length)]);
+
+            for (int i = chars.Count; i < opts.RequiredLength
+                || chars.Distinct().Count() < opts.RequiredUniqueChars; i++)
+            {
+                string rcs = randomChars[rand.Next(0, randomChars.Length)];
+                chars.Insert(rand.Next(0, chars.Count),
+                    rcs[rand.Next(0, rcs.Length)]);
+            }
+
+            return new string(chars.ToArray());
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
