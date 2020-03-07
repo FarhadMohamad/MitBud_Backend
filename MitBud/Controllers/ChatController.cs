@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using MitBud.Models;
 using MitBud.Providers;
 using MitBud.DAL;
+using System.Net.Mail;
 
 namespace MitBud.Controllers
 {
@@ -20,27 +21,40 @@ namespace MitBud.Controllers
         [System.Web.Http.HttpPost]
         [System.Web.Http.Authorize]
         [System.Web.Http.Route("api/saveConversation")]
-        public async Task<HttpResponseMessage> Conversation(ConversationViewModel conversation)
+        public async Task<HttpResponseMessage> SaveConversation(ConversationViewModel conversation)
         {
+            MitBudDBEntities mitBudDB = new MitBudDBEntities();
 
             var userId = RequestContext.Principal.Identity.GetUserId();
-            CompanyProvider.SaveConversation(conversation, userId );
+
+            var CompanyEmail = mitBudDB.Companies.Where(x => x.UserId == conversation.Company_Id).SingleOrDefault();
+
+            var clientEmail = mitBudDB.Clients.Where(x => x.Client_Id == conversation.Client_id).SingleOrDefault();
+
+            var clientId = mitBudDB.Tasks.Where(x => x.TaskId == conversation.TaskID).SingleOrDefault();
+
+            //var companyName = CompanyEmail.CompanyName;
+
+            CompanyProvider.SaveConversation(conversation, userId, clientId.Client_id );
 
             var statusCode = HttpStatusCode.Accepted;
+
             var responseMsg = new HttpResponseMessage(statusCode)
             {
                 Content = new StringContent("", Encoding.UTF8, "application/json")
             };
+         
 
+           // sendNotificationEmail(clientEmail.Name, CompanyEmail.CompanyName);
             return responseMsg;
         }
 
+   
+        
 
-        //atmar
-
-        ///[AllowAnonymous]
+        //[AllowAnonymous]
         //[Route("sendVerificationByMail")]
-        //public string sendVerificationByMail(string currentUser)
+        //public string sendNotificationEmail(string clientName, string companyName)
         //{
         //    //MailAddress address = new MailAddress(email);
         //    //string username = address.User;
@@ -50,19 +64,19 @@ namespace MitBud.Controllers
 
         //        SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
         //        var mail = new System.Net.Mail.MailMessage();
-        //        mail.From = new MailAddress("art_ismat@hotmail.com");
-        //        mail.To.Add(currentUser);
+        //        mail.From = new MailAddress("mitbud@outlook.com");
+        //        mail.To.Add(clientName);
         //        mail.Subject = "Your Authorization code.";
         //        mail.IsBodyHtml = true;
         //        string htmlBody;
-        //        htmlBody = "Hi " + currentUser + "," + "<br />" + "<br />"
-        //            + "This is an" + currentUser + "automatically generated email only to notify you – please do not reply to it." + "<br />" + "<br />"
+        //        htmlBody = "Hi " + clientName + "," + "<br />" + "<br />"
+        //            + "You have received an offer from" + companyName  + "<br />" + "<br />"
         //            + "Regards, " + "<br />"
         //            + "MicroLendr.";
         //        mail.Body = htmlBody;
         //        SmtpServer.Port = 587;
         //        SmtpServer.UseDefaultCredentials = false;
-        //        SmtpServer.Credentials = new NetworkCredential("art_ismat@hotmail.com", "", "hotmail.com");
+        //        SmtpServer.Credentials = new NetworkCredential("mitbud@outlook.com", "m42929264.", "outlook.cm");
         //        SmtpServer.EnableSsl = true;
         //        SmtpServer.Send(mail);
 
@@ -74,10 +88,11 @@ namespace MitBud.Controllers
         //        return ex.Message;
         //    }
 
-        //}
+        
 
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Authorize]
-        [System.Web.Http.Route("api/getConversation")]
+        [System.Web.Http.Route("api/getMessage")]
         public IHttpActionResult GetMessage()
         {
 

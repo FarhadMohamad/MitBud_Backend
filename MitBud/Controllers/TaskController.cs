@@ -36,7 +36,7 @@ namespace MitBud.Controllers
                     Content = new StringContent("", Encoding.UTF8, "application/json")
                 };
 
-                sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
+               sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
 
             }
             //else
@@ -47,7 +47,7 @@ namespace MitBud.Controllers
             //}
             return Request.CreateResponse(HttpStatusCode.OK);
 
-        } 
+        }
 
 
 

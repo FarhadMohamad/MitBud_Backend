@@ -13,6 +13,8 @@ namespace MitBud.Providers
         {
             MitBudDBEntities db = new MitBudDBEntities();
             Client client = new Client();
+          
+        
             client.Client_Id = UserId;
             client.Name = name;
             client.Email = email;
@@ -20,9 +22,19 @@ namespace MitBud.Providers
             //client.Email = registerViewModel.Email;
 
             db.Clients.Add(client);
+         
             db.SaveChanges();
 
 
         }
+
+        //public static void SaveClientId(string UserId)
+        //{
+        //    MitBudDBEntities db = new MitBudDBEntities();
+        //    Task task = new Task();
+        //    task.Client_id = UserId;
+        //    db.Tasks.Add(task);
+        //    db.SaveChanges();
+        //}
     }
 }

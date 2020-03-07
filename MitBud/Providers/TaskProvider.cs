@@ -81,28 +81,13 @@ namespace MitBud.Providers
         //}
 
 
-        public  static void SaveTask(TaskViewModel TaskViewModel)
+        public  static void SaveTask(TaskViewModel TaskViewModel, string userId)
         {
-
-
-            //AccountController account = new AccountController();
-            //var randomPass = GenerateRandomPassword();
-
-
-            //RegisterClient r = new RegisterClient();
-            //var s = r;
-
-            //s.Email = TaskViewModel.ClientEmail;
-            //s.Password = randomPass;
-            //s.ConfirmPassword = randomPass;
-
-            //account.Register_client(r);
-
 
 
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
-
+            Task.Client_id = userId;
             Task.Title = TaskViewModel.Title;
             Task.Description = TaskViewModel.Description;
             Task.Category = TaskViewModel.Category;

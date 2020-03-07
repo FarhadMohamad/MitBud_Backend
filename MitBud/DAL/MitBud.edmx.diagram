@@ -26,6 +26,7 @@
         <AssociationConnector Association="MitBudDBModel.FK_Category_Company" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.FK_Conversation_Company" ManuallyRouted="false" />
         <AssociationConnector Association="MitBudDBModel.AspNetUserRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="MitBudDBModel.FK_Conversation_Task" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
