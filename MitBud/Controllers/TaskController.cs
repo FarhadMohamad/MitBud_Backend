@@ -63,10 +63,13 @@ namespace MitBud.Controllers
             {
                 Content = new StringContent("", Encoding.UTF8, "application/json")
             };
-            AccountController a = new AccountController();
-            var user = await a.UserManager.FindByEmailAsync(taskViewModel.ClientEmail);
-            string code = await a.UserManager.GeneratePasswordResetTokenAsync(user.Id);
-            sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
+
+           // this wsa the problem
+
+            //AccountController a = new AccountController();
+            //var user = await a.UserManager.FindByEmailAsync(taskViewModel.ClientEmail);
+            //string code = await a.UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            //sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
 
             return Request.CreateResponse(HttpStatusCode.OK);
 

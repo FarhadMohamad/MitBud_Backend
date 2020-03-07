@@ -80,7 +80,10 @@ namespace MitBud.Providers
 
         //}
 
-
+        //public string codd(string a)
+        //{
+        //    return a;
+        //}
         public  static void SaveTask(TaskViewModel TaskViewModel)
         {
 
@@ -93,12 +96,14 @@ namespace MitBud.Providers
             var s = r;
 
             s.Email = TaskViewModel.ClientEmail;
+            s.Name = TaskViewModel.ClientName;
             s.Password = randomPass;
             s.ConfirmPassword = randomPass;
+            
 
             account.Register_client(r);
 
-
+          
 
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
@@ -115,8 +120,9 @@ namespace MitBud.Providers
             Task.TaskCost = TaskViewModel.TaskCost;
             db.Tasks.Add(Task);
             db.SaveChanges();
+         
 
-            SendPasswordResetEmail(TaskViewModel.ClientEmail, TaskViewModel.ClientName);
+           // SendPasswordResetEmail(TaskViewModel.ClientEmail, TaskViewModel.ClientName);
 
             
             //ChangePasswordBindingModel ch = new ChangePasswordBindingModel();
