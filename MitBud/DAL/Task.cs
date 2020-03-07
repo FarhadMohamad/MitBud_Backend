@@ -14,6 +14,12 @@ namespace MitBud.DAL
     
     public partial class Task
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Task()
+        {
+            this.Conversations = new HashSet<Conversation>();
+        }
+    
         public int TaskId { get; set; }
         public string Client_id { get; set; }
         public string Title { get; set; }
@@ -28,5 +34,7 @@ namespace MitBud.DAL
         public Nullable<decimal> TaskCost { get; set; }
     
         public virtual Client Client { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Conversation> Conversations { get; set; }
     }
 }

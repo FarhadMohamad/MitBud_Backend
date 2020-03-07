@@ -80,34 +80,14 @@ namespace MitBud.Providers
 
         //}
 
-        //public string codd(string a)
-        //{
-        //    return a;
-        //}
-        public  static void SaveTask(TaskViewModel TaskViewModel)
+
+        public  static void SaveTask(TaskViewModel TaskViewModel, string userId)
         {
 
 
-            AccountController account = new AccountController();
-            var randomPass = GenerateRandomPassword();
-
-
-            RegisterClient r = new RegisterClient();
-            var s = r;
-
-            s.Email = TaskViewModel.ClientEmail;
-            s.Name = TaskViewModel.ClientName;
-            s.Password = randomPass;
-            s.ConfirmPassword = randomPass;
-            
-
-            account.Register_client(r);
-
-          
-
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
-
+            Task.Client_id = userId;
             Task.Title = TaskViewModel.Title;
             Task.Description = TaskViewModel.Description;
             Task.Category = TaskViewModel.Category;
@@ -120,9 +100,8 @@ namespace MitBud.Providers
             Task.TaskCost = TaskViewModel.TaskCost;
             db.Tasks.Add(Task);
             db.SaveChanges();
-         
 
-           // SendPasswordResetEmail(TaskViewModel.ClientEmail, TaskViewModel.ClientName);
+            //SendPasswordResetEmail(TaskViewModel.ClientEmail, TaskViewModel.ClientName);
 
             
             //ChangePasswordBindingModel ch = new ChangePasswordBindingModel();
@@ -165,44 +144,7 @@ namespace MitBud.Providers
         //}
 
 
-        [AllowAnonymous]
-        [Route("sendVerificationByMail")]
-        public static void SendPasswordResetEmail(string ToEmail, string UserName)
-        {
-            //MailAddress address = new MailAddress(email);
-            //string username = address.User;
-
-            try
-            {
-
-                SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
-                var mail = new System.Net.Mail.MailMessage();
-                mail.From = new MailAddress("atmar@hotmail.dk");
-                mail.To.Add(ToEmail);
-                mail.Subject = "Your Authorization code.";
-                mail.IsBodyHtml = true;
-                string htmlBody;
-                htmlBody = "Hi " + UserName + "," + "<br />" + "<br />"
-                    + "This is an automatically generated email only to notify you – please do not reply to it." + "<br />" + "<br />"
-                    + "http://localhost:60355/api/Account/ResetPassword?Email=" + ToEmail +  "<br />" + "<br />"
-                    + "Regards, " + "<br />"
-                    + "MitBud.";
-                mail.Body = htmlBody;
-                SmtpServer.Port = 587;
-                SmtpServer.UseDefaultCredentials = false;
-                SmtpServer.Credentials = new NetworkCredential("atmar@hotmail.dk", "mursal1506", "Outlook.com");
-                SmtpServer.EnableSsl = true;
-                SmtpServer.Send(mail);
-
-                //return "sent";
-            }
-            catch (Exception ex)
-            {
-
-                //ex.Message;
-            }
-
-        }
+       
 
 
 

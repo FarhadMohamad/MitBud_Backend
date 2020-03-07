@@ -28,7 +28,7 @@ namespace MitBud.Controllers
 
             if (userId != null)
             {
-                //TaskProvider.SaveTaskLoggedIn(taskViewModel, userId);
+                TaskProvider.SaveTaskLoggedIn(taskViewModel, userId);
 
                 var dd = HttpStatusCode.Accepted;
                 var responseMsg = new HttpResponseMessage(dd)
@@ -36,46 +36,18 @@ namespace MitBud.Controllers
                     Content = new StringContent("", Encoding.UTF8, "application/json")
                 };
 
-                sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
+               sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
 
             }
+            //else
+            //{
+            //    AccountController account = new AccountController();
 
-            else
-            {
-                SaveTaskNotLoggedIn(taskViewModel);
-            }
+            //    await account.SaveTaskNotLoggedIn(taskViewModel);
+            //}
             return Request.CreateResponse(HttpStatusCode.OK);
 
         }
-
-
-        [System.Web.Http.HttpPost]
-        //[System.Web.Http.Authorize]
-        [System.Web.Http.Route("api/SaveTaskNewUser")]
-        public async Task<HttpResponseMessage> SaveTaskNotLoggedIn(TaskViewModel taskViewModel)
-        {
-            //var userId = RequestContext.Principal.Identity.GetUserId();
-         
-            TaskProvider.SaveTask(taskViewModel);
-
-            var dd = HttpStatusCode.Accepted;
-            var responseMsg = new HttpResponseMessage(dd)
-            {
-                Content = new StringContent("", Encoding.UTF8, "application/json")
-            };
-
-           // this wsa the problem
-
-            //AccountController a = new AccountController();
-            //var user = await a.UserManager.FindByEmailAsync(taskViewModel.ClientEmail);
-            //string code = await a.UserManager.GeneratePasswordResetTokenAsync(user.Id);
-            //sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-
-        }
-
-
 
 
 
@@ -166,6 +138,8 @@ namespace MitBud.Controllers
 
 
         }
+
+
 
 
     }

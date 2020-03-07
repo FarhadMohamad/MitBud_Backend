@@ -18,7 +18,9 @@ namespace MitBud.DAL
         public string Company_Id { get; set; }
         public string Client_Id { get; set; }
         public string Message { get; set; }
+        public Nullable<int> Task_Id { get; set; }
     
         public virtual Company Company { get; set; }
+        public virtual Task Task { get; set; }
     }
 }

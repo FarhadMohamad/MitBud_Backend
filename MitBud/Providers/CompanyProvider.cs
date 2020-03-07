@@ -42,14 +42,15 @@ namespace MitBud.Providers
 
         }
 
-        public static void SaveConversation(ConversationViewModel conversation, string UserId)
+        public static void SaveConversation(ConversationViewModel conversation, string UserId, string clientId)
         {
             MitBudDBEntities db = new MitBudDBEntities();
             Task task = new Task();
             Conversation con = new Conversation();
             con.Company_Id = UserId;
+            con.Task_Id = conversation.TaskID;
             con.Message = conversation.Message;
-            con.Client_Id = conversation.Client_id;
+            con.Client_Id = clientId;
             db.Conversations.Add(con);
             db.SaveChanges();
 

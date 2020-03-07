@@ -392,12 +392,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MitBud.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DAL\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>MitBud.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\sp_helpdiagrams_Result.cs">
-      <DependentUpon>MitBud.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAL\sysdiagram.cs">
       <DependentUpon>MitBud.tt</DependentUpon>
     </Compile>
