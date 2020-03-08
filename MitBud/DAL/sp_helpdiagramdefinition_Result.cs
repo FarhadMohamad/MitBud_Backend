@@ -10,16 +10,10 @@
 namespace MitBud.DAL
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Conversation
+    public partial class sp_helpdiagramdefinition_Result
     {
-        public int Id { get; set; }
-        public Nullable<int> Task_Id { get; set; }
-        public string Company_Id { get; set; }
-        public string Client_Id { get; set; }
-        public string Message { get; set; }
-    
-        public virtual Company Company { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

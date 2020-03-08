@@ -330,7 +330,7 @@ namespace MitBud.Controllers
         [System.Web.Http.HttpPost]
         [System.Web.Http.AllowAnonymous]
         [Route("Login")]
-        public async Task<HttpResponseMessage> LoginUser(LoginUserBindingModel model)
+        public async Task<IHttpActionResult> LoginUser(LoginUserBindingModel model)
         {
             // Invoke the "token" OWIN service to perform the login: /api/token
             // Ugly hack: I use a server-side HTTP POST because I cannot directly invoke the service (it is deeply hidden in the OAuthAuthorizationServerHandler class)
@@ -356,26 +356,36 @@ namespace MitBud.Controllers
                 {
                     Content = new StringContent(responseString, Encoding.UTF8, "application/json")
                 };
-
-
-                MitBudDBEntities mitBudDB = new MitBudDBEntities();
-                var a = mitBudDB.AspNetRoles.FirstOrDefault(x => x.Name == "Client");
-                var b = "Client";
-
-                var c = "Company";
-                if (b == a.Name)
+                if (responseCode == System.Net.HttpStatusCode.OK)
                 {
-                    return responseMsg;
 
+                    MitBudDBEntities mitBudDB = new MitBudDBEntities();
+
+                    var Bodyresponse = mitBudDB.AspNetUsers.FirstOrDefault(X => X.Email == model.Username);
+
+                    // Get the roles associated with that user
+                    var userRoles = await UserManager.GetRolesAsync(Bodyresponse.Id.ToString());
+
+                    // Setup a RoleViewModel list of roles and iterate through userRoles adding them to the list
+                    List<RoleViewModel> roleList = new List<RoleViewModel>();
+                    foreach (var role in userRoles)
+                    {
+                        var item = new RoleViewModel { Role = role };
+                        roleList.Add(item);
+                        return Ok(item);
+                    }
                 }
-                else if  (c == a.Name)
-                {
-                    return responseMsg;
 
-                }
-                return responseMsg;
-                //var result = 
 
+
+
+
+
+
+
+
+
+                return NotFound();
             }
         }
 
