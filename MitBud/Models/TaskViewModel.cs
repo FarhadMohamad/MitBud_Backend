@@ -16,6 +16,7 @@ namespace MitBud.Models
         public string ClientName { get; set; }
         public string ClientAddress { get; set; }
         public int? ClientPostCode { get; set; }
+        public string Region { get; set; }
         public string ClientTelephone { get; set; }
         public string ClientEmail { get; set; }
         public string WhoAreYou { get; set; }

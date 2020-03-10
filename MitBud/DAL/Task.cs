@@ -26,6 +26,7 @@ namespace MitBud.DAL
         public string ClientEmail { get; set; }
         public string WhoAreYou { get; set; }
         public Nullable<decimal> TaskCost { get; set; }
+        public string Region { get; set; }
     
         public virtual Client Client { get; set; }
     }

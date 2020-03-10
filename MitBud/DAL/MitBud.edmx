@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MitBudDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MitBudDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -94,6 +94,7 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
           <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Region" Type="nvarchar" MaxLength="50" />
           <Property Name="PostCode" Type="int" />
         </EntityType>
         <EntityType Name="Company_Category">
@@ -135,6 +136,7 @@
           <Property Name="Category" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientPostCode" Type="int" />
+          <Property Name="Region" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientAddress" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientTelephone" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientEmail" Type="nvarchar" MaxLength="50" />
@@ -267,9 +269,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="find_role" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UserId" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -356,8 +355,7 @@
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MitBudDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -457,6 +455,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Company_AspNetUsers" FromRole="Company" ToRole="AspNetUsers" />
           <NavigationProperty Name="Company_Category" Relationship="Self.FK_Category_Company" FromRole="Company" ToRole="Company_Category" />
           <NavigationProperty Name="Conversations" Relationship="Self.FK_Conversation_Company" FromRole="Company" ToRole="Conversation" />
+          <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Company_Category">
           <Key>
@@ -506,6 +505,7 @@
           <Property Name="WhoAreYou" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TaskCost" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Task_Client" FromRole="Task" ToRole="Client" />
+          <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -786,6 +786,7 @@
           <EntitySetMapping Name="Companies">
             <EntityTypeMapping TypeName="MitBudDBModel.Company">
               <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Region" ColumnName="Region" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="CompanySize" ColumnName="CompanySize" />
@@ -833,6 +834,7 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="MitBudDBModel.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="Region" ColumnName="Region" />
                 <ScalarProperty Name="TaskId" ColumnName="TaskId" />
                 <ScalarProperty Name="Client_id" ColumnName="Client_id" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -856,7 +858,6 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="find_role" FunctionName="MitBudDBModel.Store.find_role" />
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="MitBudDBModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="MitBudDBModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="MitBudDBModel.Store.sp_dropdiagram" />

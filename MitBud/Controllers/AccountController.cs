@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,6 +23,7 @@ using MitBud.DAL;
 using MitBud.Models;
 using MitBud.Providers;
 using MitBud.Results;
+using Newtonsoft.Json.Linq;
 
 namespace MitBud.Controllers
 {
@@ -464,6 +466,7 @@ namespace MitBud.Controllers
         [System.Web.Http.Route("SaveTaskNewUser")]
         public async Task<IHttpActionResult> SaveTaskNotLoggedIn(TaskViewModel taskViewModel)
         {
+            GetRegion(taskViewModel.ClientAddress, taskViewModel.ClientPostCode.ToString());
 
             if (!ModelState.IsValid)
             {
@@ -471,10 +474,10 @@ namespace MitBud.Controllers
             }
 
             var randomPass = GenerateRandomPassword();
-            RegisterClient r = new RegisterClient();
-            r.Email = taskViewModel.ClientEmail;
-            r.Password = randomPass;
-            r.ConfirmPassword = randomPass;
+            RegisterClient registerClient = new RegisterClient();
+            registerClient.Email = taskViewModel.ClientEmail;
+            registerClient.Password = randomPass;
+            registerClient.ConfirmPassword = randomPass;
 
             var user = new ApplicationUser() { UserName = taskViewModel.ClientEmail, Email = taskViewModel.ClientEmail };
 
@@ -485,6 +488,7 @@ namespace MitBud.Controllers
                 var UserId = UserManager.FindByEmail(taskViewModel.ClientEmail);
                 
                 ClientProvider.SaveClientInfo(taskViewModel.ClientName, taskViewModel.ClientEmail, UserId.Id);
+
                 TaskProvider.SaveTask(taskViewModel, UserId.Id);
                 UserManager.AddToRole(UserId.Id, "Client");
 
@@ -513,6 +517,66 @@ namespace MitBud.Controllers
             return Ok();
 
         }
+
+
+   
+        public string GetRegion(string address, string post)
+        {
+
+            //TaskViewModel taskViewModel = new TaskViewModel();
+            string streetName = address;
+            string streetNr = "8";
+            string postNr = post;
+            string city = "Sorø";
+           
+
+            string url = "https://dawa.aws.dk/autocomplete?caretpos=28&fuzzy=&q=" + streetName + " " + streetNr + "," +
+                         " " + postNr + " " + city + "&startfra=adresse&type=adresse";
+            string urlResult = url;
+            string data = "";
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                Stream recStream = resp.GetResponseStream();
+                StreamReader readStream = null;
+                if (resp.CharacterSet == null)
+                {
+                    readStream = new StreamReader(recStream);
+                }
+                else
+                {
+                    readStream = new StreamReader(recStream, Encoding.GetEncoding(resp.CharacterSet));
+                }
+
+                data = readStream.ReadToEnd();
+                resp.Close();
+                readStream.Close();
+            }
+           
+            var postcodeList = JArray.Parse(data).Select(p =>
+                new
+                {
+
+                   kommunekode = p["data"]["kommunekode"],
+                  
+
+                });
+
+            var obj = JObject.Parse(data);
+
+            foreach (JObject element in obj["data"])
+            {
+                Console.WriteLine(element["kommunekode"]);
+            }
+
+            return obj.ToString();
+
+
+        }
+
 
         // POST: /Account/CreatePassword
         [System.Web.Http.HttpPost]

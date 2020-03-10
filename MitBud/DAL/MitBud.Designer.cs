@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\DJ\source\repos\FarhadMohamad\MitBud_Backend\MitBud\DAL\MitBud.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\art_i\source\repos\MitBud_Backend\MitBud\DAL\MitBud.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
