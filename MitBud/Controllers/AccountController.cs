@@ -599,8 +599,12 @@ namespace MitBud.Controllers
                 readStream.Close();
             }
 
-            List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
-            var test = (string)json[0]["region"]["navn"];
+            dynamic data1 = JObject.Parse(data);
+
+            var userGuid = Convert.ToString(data1["Data"]["guid"]);
+
+            //List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
+            var test = (string)data1[0]["region"]["navn"];
 
             return test;
 
