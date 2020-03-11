@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -23,6 +24,7 @@ using MitBud.DAL;
 using MitBud.Models;
 using MitBud.Providers;
 using MitBud.Results;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MitBud.Controllers
@@ -466,7 +468,8 @@ namespace MitBud.Controllers
         [System.Web.Http.Route("SaveTaskNewUser")]
         public async Task<IHttpActionResult> SaveTaskNotLoggedIn(TaskViewModel taskViewModel)
         {
-            GetRegion(taskViewModel.ClientAddress, taskViewModel.ClientPostCode.ToString());
+            var test = GetMunicipalityCode(taskViewModel.ClientAddress, taskViewModel.ClientPostCode.ToString());
+
 
             if (!ModelState.IsValid)
             {
@@ -520,14 +523,14 @@ namespace MitBud.Controllers
 
 
    
-        public string GetRegion(string address, string post)
+        public string GetMunicipalityCode(string address, string post)
         {
 
             //TaskViewModel taskViewModel = new TaskViewModel();
             string streetName = address;
-            string streetNr = "8";
+            string streetNr = "7";
             string postNr = post;
-            string city = "Sorø";
+            string city = "Høng";
            
 
             string url = "https://dawa.aws.dk/autocomplete?caretpos=28&fuzzy=&q=" + streetName + " " + streetNr + "," +
@@ -555,27 +558,54 @@ namespace MitBud.Controllers
                 resp.Close();
                 readStream.Close();
             }
-           
-            var postcodeList = JArray.Parse(data).Select(p =>
-                new
-                {
 
-                   kommunekode = p["data"]["kommunekode"],
-                  
+            List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
+            var test = (string)json[0]["data"]["kommunekode"];
 
-                });
-
-            var obj = JObject.Parse(data);
-
-            foreach (JObject element in obj["data"])
-            {
-                Console.WriteLine(element["kommunekode"]);
-            }
-
-            return obj.ToString();
-
+            GetRegion(test);
+            return test;
 
         }
+
+        public string GetRegion(string muncipalityCode)
+        {
+
+            
+  
+
+
+            string url = "https://dawa.aws.dk/kommuner/" + muncipalityCode;
+            string urlResult = url;
+            string data = "";
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                Stream recStream = resp.GetResponseStream();
+                StreamReader readStream = null;
+                if (resp.CharacterSet == null)
+                {
+                    readStream = new StreamReader(recStream);
+                }
+                else
+                {
+                    readStream = new StreamReader(recStream, Encoding.GetEncoding(resp.CharacterSet));
+                }
+
+                data = readStream.ReadToEnd();
+                resp.Close();
+                readStream.Close();
+            }
+
+            List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
+            var test = (string)json[0]["region"]["navn"];
+
+            return test;
+
+        }
+
 
 
         // POST: /Account/CreatePassword
