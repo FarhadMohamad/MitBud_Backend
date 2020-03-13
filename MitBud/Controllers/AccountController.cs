@@ -468,8 +468,8 @@ namespace MitBud.Controllers
         [System.Web.Http.Route("SaveTaskNewUser")]
         public async Task<IHttpActionResult> SaveTaskNotLoggedIn(TaskViewModel taskViewModel)
         {
-            var test = GetMunicipalityCode(taskViewModel.ClientAddress, taskViewModel.ClientPostCode.ToString());
-
+            taskViewModel.Region = GetMunicipalityCode(taskViewModel.ClientStreetName, taskViewModel.ClientPostCode.ToString(), taskViewModel.ClientHouseNumber, taskViewModel.ClientCity);
+            
 
             if (!ModelState.IsValid)
             {
@@ -522,15 +522,17 @@ namespace MitBud.Controllers
         }
 
 
-   
-        public string GetMunicipalityCode(string address, string post)
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("GetMuncipalityCode")]
+        public string GetMunicipalityCode(string address, string post, string streetNr, string City)
         {
 
             //TaskViewModel taskViewModel = new TaskViewModel();
             string streetName = address;
-            string streetNr = "7";
+            string streetNumber = streetNr;
             string postNr = post;
-            string city = "Høng";
+            string city = City;
            
 
             string url = "https://dawa.aws.dk/autocomplete?caretpos=28&fuzzy=&q=" + streetName + " " + streetNr + "," +
@@ -562,18 +564,17 @@ namespace MitBud.Controllers
             List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
             var test = (string)json[0]["data"]["kommunekode"];
 
-            GetRegion(test);
-            return test;
+            var regionName = GetRegionName(test);
+            return regionName;
 
         }
 
-        public string GetRegion(string muncipalityCode)
-        {
-
-            
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("GetRegionName")]
+        public string GetRegionName(string muncipalityCode)
+        {      
   
-
-
             string url = "https://dawa.aws.dk/kommuner/" + muncipalityCode;
             string urlResult = url;
             string data = "";
@@ -599,14 +600,11 @@ namespace MitBud.Controllers
                 readStream.Close();
             }
 
-            dynamic data1 = JObject.Parse(data);
+            var userObj = JObject.Parse(data);
 
-            var userGuid = Convert.ToString(data1["Data"]["guid"]);
+            var userGuid = Convert.ToString(userObj["region"]["navn"]);
 
-            //List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
-            var test = (string)data1[0]["region"]["navn"];
-
-            return test;
+            return userGuid;
 
         }
 

@@ -20,13 +20,15 @@ namespace MitBud.DAL
         public string Description { get; set; }
         public string Category { get; set; }
         public string ClientName { get; set; }
-        public Nullable<int> ClientPostCode { get; set; }
-        public string ClientAddress { get; set; }
+        public string ClientPostCode { get; set; }
+        public string Region { get; set; }
+        public string ClientStreetName { get; set; }
+        public string ClientHouseNumber { get; set; }
+        public string ClientCity { get; set; }
         public string ClientTelephone { get; set; }
         public string ClientEmail { get; set; }
         public string WhoAreYou { get; set; }
         public Nullable<decimal> TaskCost { get; set; }
-        public string Region { get; set; }
     
         public virtual Client Client { get; set; }
     }

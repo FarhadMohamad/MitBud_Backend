@@ -29,9 +29,11 @@ namespace MitBud.Providers
             Task.Description = TaskViewModel.Description;
             Task.Category = TaskViewModel.Category;
             Task.ClientName = TaskViewModel.ClientName;
-            Task.ClientAddress = TaskViewModel.ClientName;
+            Task.ClientStreetName = TaskViewModel.ClientStreetName;
+            Task.ClientHouseNumber = TaskViewModel.ClientHouseNumber;
             Task.ClientPostCode = TaskViewModel.ClientPostCode;
             Task.Region = TaskViewModel.Region;
+            Task.ClientCity = TaskViewModel.ClientCity;
             Task.ClientTelephone = TaskViewModel.ClientTelephone;
             Task.ClientEmail = TaskViewModel.ClientEmail;
             Task.WhoAreYou = TaskViewModel.WhoAreYou;
@@ -55,8 +57,11 @@ namespace MitBud.Providers
             Task.Description = TaskViewModel.Description;
             Task.Category = TaskViewModel.Category;
             Task.ClientName = TaskViewModel.ClientName;
-            Task.ClientAddress = TaskViewModel.ClientName;
+            Task.ClientStreetName = TaskViewModel.ClientStreetName;
+            Task.ClientHouseNumber = TaskViewModel.ClientHouseNumber;
             Task.ClientPostCode = TaskViewModel.ClientPostCode;
+            Task.Region = TaskViewModel.Region;
+            Task.ClientCity = TaskViewModel.ClientCity;
             Task.ClientTelephone = TaskViewModel.ClientTelephone;
             Task.ClientEmail = TaskViewModel.ClientEmail;
             Task.WhoAreYou = TaskViewModel.WhoAreYou;

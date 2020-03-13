@@ -13,8 +13,8 @@ namespace MitBud.Models
         public string Category { get; set; }
         public string ClientName { get; set; }
         
-        public int? ClientPostCode { get; set; }
-        public int? PostCode { get; set; }
+        public string ClientPostCode { get; set; }
+        public string PostCode { get; set; }
 
       
     }

@@ -30,8 +30,8 @@ namespace MitBud.DAL
         public string Email { get; set; }
         public string ContactPerson { get; set; }
         public string Address { get; set; }
-        public Nullable<int> PostCode { get; set; }
         public string Region { get; set; }
+        public string PostCode { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
