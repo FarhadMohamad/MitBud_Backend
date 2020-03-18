@@ -20,24 +20,26 @@ namespace MitBud.Providers
 
 
         //Save Tasks to the database to the Tasks table
-        public static void SaveTaskLoggedIn(TaskViewModel TaskViewModel, string userId)
+        public static void SaveTaskLoggedIn(TaskViewModel taskViewModel, string userId)
         {
+            AccountController accountController = new AccountController();
+            var regionName = accountController.GetMunicipalityCode(taskViewModel.ClientStreetName, taskViewModel.ClientPostCode.ToString(), taskViewModel.ClientHouseNumber, taskViewModel.ClientCity);
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
-            Task.Title = TaskViewModel.Title;
+            Task.Title = taskViewModel.Title;
             Task.Client_id = userId;
-            Task.Description = TaskViewModel.Description;
-            Task.Category = TaskViewModel.Category;
-            Task.ClientName = TaskViewModel.ClientName;
-            Task.ClientStreetName = TaskViewModel.ClientStreetName;
-            Task.ClientHouseNumber = TaskViewModel.ClientHouseNumber;
-            Task.ClientPostCode = TaskViewModel.ClientPostCode;
-            Task.Region = TaskViewModel.Region;
-            Task.ClientCity = TaskViewModel.ClientCity;
-            Task.ClientTelephone = TaskViewModel.ClientTelephone;
-            Task.ClientEmail = TaskViewModel.ClientEmail;
-            Task.WhoAreYou = TaskViewModel.WhoAreYou;
-            Task.TaskCost = TaskViewModel.TaskCost;
+            Task.Description = taskViewModel.Description;
+            Task.Category = taskViewModel.Category;
+            Task.ClientName = taskViewModel.ClientName;
+            Task.ClientStreetName = taskViewModel.ClientStreetName;
+            Task.ClientHouseNumber = taskViewModel.ClientHouseNumber;
+            Task.ClientPostCode = taskViewModel.ClientPostCode;
+            Task.Region = regionName;
+            Task.ClientCity = taskViewModel.ClientCity;
+            Task.ClientTelephone = taskViewModel.ClientTelephone;
+            Task.ClientEmail = taskViewModel.ClientEmail;
+            Task.WhoAreYou = taskViewModel.WhoAreYou;
+            Task.TaskCost = taskViewModel.TaskCost;
             db.Tasks.Add(Task);
             db.SaveChanges();
 
@@ -46,7 +48,7 @@ namespace MitBud.Providers
 
 
         //Save Task to the database in the Tasks table
-        public static void SaveTask(TaskViewModel TaskViewModel, string userId)
+        public static void SaveTaskNotLoggedIn(TaskViewModel TaskViewModel, string userId)
         {
 
 
@@ -69,7 +71,7 @@ namespace MitBud.Providers
             db.Tasks.Add(Task);
             db.SaveChanges();
 
-            //SendPasswordResetEmail(TaskViewModel.ClientEmail, TaskViewModel.ClientName);
+            //SendPasswordResetEmail(taskViewModel.ClientEmail, taskViewModel.ClientName);
 
             
             //ChangePasswordBindingModel ch = new ChangePasswordBindingModel();

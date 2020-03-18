@@ -492,7 +492,7 @@ namespace MitBud.Controllers
                 
                 ClientProvider.SaveClientInfo(taskViewModel.ClientName, taskViewModel.ClientEmail, UserId.Id);
 
-                TaskProvider.SaveTask(taskViewModel, UserId.Id);
+                TaskProvider.SaveTaskNotLoggedIn(taskViewModel, UserId.Id);
                 UserManager.AddToRole(UserId.Id, "Client");
 
             }
@@ -525,14 +525,14 @@ namespace MitBud.Controllers
         [System.Web.Http.HttpPost]
         [System.Web.Http.AllowAnonymous]
         [System.Web.Http.Route("GetMuncipalityCode")]
-        public string GetMunicipalityCode(string address, string post, string streetNr, string City)
+        public string GetMunicipalityCode(string address, string postCode, string streetNr, string cityName)
         {
 
             //TaskViewModel taskViewModel = new TaskViewModel();
             string streetName = address;
             string streetNumber = streetNr;
-            string postNr = post;
-            string city = City;
+            string postNr = postCode;
+            string city = cityName;
            
 
             string url = "https://dawa.aws.dk/autocomplete?caretpos=28&fuzzy=&q=" + streetName + " " + streetNr + "," +
