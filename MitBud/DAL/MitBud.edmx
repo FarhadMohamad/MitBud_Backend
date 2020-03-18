@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MitBudDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MitBudDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -144,6 +144,9 @@
           <Property Name="ClientEmail" Type="nvarchar" MaxLength="50" />
           <Property Name="WhoAreYou" Type="nvarchar" MaxLength="50" />
           <Property Name="TaskCost" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="DesiredDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Image" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_AspNetUserRoles_AspNetRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
@@ -326,8 +329,7 @@
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MitBudDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -480,6 +482,9 @@
           <Property Name="WhoAreYou" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TaskCost" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Task_Client" FromRole="Task" ToRole="Client" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="DesiredDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -764,6 +769,9 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="MitBudDBModel.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="DesiredDate" ColumnName="DesiredDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="TaskId" ColumnName="TaskId" />
                 <ScalarProperty Name="Client_id" ColumnName="Client_id" />
                 <ScalarProperty Name="Title" ColumnName="Title" />

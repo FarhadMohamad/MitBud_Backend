@@ -40,6 +40,9 @@ namespace MitBud.Providers
             Task.ClientEmail = taskViewModel.ClientEmail;
             Task.WhoAreYou = taskViewModel.WhoAreYou;
             Task.TaskCost = taskViewModel.TaskCost;
+            Task.Date = taskViewModel.Date;
+            Task.DesiredDate = taskViewModel.DesiredDate;
+            Task.Image = taskViewModel.Image;
             db.Tasks.Add(Task);
             db.SaveChanges();
 
@@ -48,26 +51,29 @@ namespace MitBud.Providers
 
 
         //Save Task to the database in the Tasks table
-        public static void SaveTaskNotLoggedIn(TaskViewModel TaskViewModel, string userId)
+        public static void SaveTaskNotLoggedIn(TaskViewModel taskViewModel, string userId)
         {
 
 
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
             Task.Client_id = userId;
-            Task.Title = TaskViewModel.Title;
-            Task.Description = TaskViewModel.Description;
-            Task.Category = TaskViewModel.Category;
-            Task.ClientName = TaskViewModel.ClientName;
-            Task.ClientStreetName = TaskViewModel.ClientStreetName;
-            Task.ClientHouseNumber = TaskViewModel.ClientHouseNumber;
-            Task.ClientPostCode = TaskViewModel.ClientPostCode;
-            Task.Region = TaskViewModel.Region;
-            Task.ClientCity = TaskViewModel.ClientCity;
-            Task.ClientTelephone = TaskViewModel.ClientTelephone;
-            Task.ClientEmail = TaskViewModel.ClientEmail;
-            Task.WhoAreYou = TaskViewModel.WhoAreYou;
-            Task.TaskCost = TaskViewModel.TaskCost;
+            Task.Title = taskViewModel.Title;
+            Task.Description = taskViewModel.Description;
+            Task.Category = taskViewModel.Category;
+            Task.ClientName = taskViewModel.ClientName;
+            Task.ClientStreetName = taskViewModel.ClientStreetName;
+            Task.ClientHouseNumber = taskViewModel.ClientHouseNumber;
+            Task.ClientPostCode = taskViewModel.ClientPostCode;
+            Task.Region = taskViewModel.Region;
+            Task.ClientCity = taskViewModel.ClientCity;
+            Task.ClientTelephone = taskViewModel.ClientTelephone;
+            Task.ClientEmail = taskViewModel.ClientEmail;
+            Task.WhoAreYou = taskViewModel.WhoAreYou;
+            Task.TaskCost = taskViewModel.TaskCost;
+            Task.Date = taskViewModel.Date;
+            Task.DesiredDate = taskViewModel.DesiredDate;
+            Task.Image = taskViewModel.Image;
             db.Tasks.Add(Task);
             db.SaveChanges();
 

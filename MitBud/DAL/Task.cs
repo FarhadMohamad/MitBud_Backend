@@ -29,6 +29,9 @@ namespace MitBud.DAL
         public string ClientEmail { get; set; }
         public string WhoAreYou { get; set; }
         public Nullable<decimal> TaskCost { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public string DesiredDate { get; set; }
+        public byte[] Image { get; set; }
     
         public virtual Client Client { get; set; }
     }

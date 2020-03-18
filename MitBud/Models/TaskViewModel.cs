@@ -23,5 +23,8 @@ namespace MitBud.Models
         public string ClientEmail { get; set; }
         public string WhoAreYou { get; set; }
         public decimal TaskCost { get; set; }
+        public DateTime? Date { get; set; }
+        public string DesiredDate { get; set; }
+        public byte[] Image { get; set; }
     }
 }
