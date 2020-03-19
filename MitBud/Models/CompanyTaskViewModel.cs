@@ -12,7 +12,7 @@ namespace MitBud.Models
         public string Description { get; set; }
         public string Category { get; set; }
         public string ClientName { get; set; }
-        
+        public string Region { get; set; }
         public string ClientPostCode { get; set; }
         public string PostCode { get; set; }
 

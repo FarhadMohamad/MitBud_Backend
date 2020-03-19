@@ -147,6 +147,7 @@
           <Property Name="Date" Type="datetime" />
           <Property Name="DesiredDate" Type="nvarchar" MaxLength="50" />
           <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="Status" Type="int" />
         </EntityType>
         <Association Name="FK_AspNetUserRoles_AspNetRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
@@ -485,6 +486,7 @@
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="DesiredDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Status" Type="Int32" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -769,6 +771,7 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="MitBudDBModel.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="DesiredDate" ColumnName="DesiredDate" />
                 <ScalarProperty Name="Date" ColumnName="Date" />

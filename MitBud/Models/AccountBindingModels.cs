@@ -149,6 +149,7 @@ namespace MitBud.Models
         public string CVR { get; set; }
         public string ContactPerson { get; set; }
         public string Address { get; set; }
+        public string Region { get; set; }
         public string PostCode { get; set; }
 
 

@@ -275,7 +275,11 @@ namespace MitBud.Controllers
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+                List<Claim> roles = oAuthIdentity.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName, Newtonsoft.Json.JsonConvert.SerializeObject(roles.Select(x => x.Value)));
+
+
+                //AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName, user.Roles);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
             }
             else
@@ -334,7 +338,7 @@ namespace MitBud.Controllers
         [System.Web.Http.HttpPost]
         [System.Web.Http.AllowAnonymous]
         [Route("Login")]
-        public async Task<IHttpActionResult> LoginUser(LoginUserBindingModel model)
+        public async Task<HttpResponseMessage> LoginUser(LoginUserBindingModel model)
         {
             // Invoke the "token" OWIN service to perform the login: /api/token
             // Ugly hack: I use a server-side HTTP POST because I cannot directly invoke the service (it is deeply hidden in the OAuthAuthorizationServerHandler class)
@@ -360,7 +364,7 @@ namespace MitBud.Controllers
                 {
                     Content = new StringContent(responseString, Encoding.UTF8, "application/json")
                 };
-                if (responseCode == System.Net.HttpStatusCode.OK)
+                if (responseCode == HttpStatusCode.OK)
                 {
 
                     MitBudDBEntities mitBudDB = new MitBudDBEntities();
@@ -376,20 +380,15 @@ namespace MitBud.Controllers
                     {
                         var item = new RoleViewModel { Role = role };
                         roleList.Add(item);
-                        return Ok(item);
+                        //return Ok(item);
+                        var res = responseMsg;
+                       
                     }
                 }
 
-
-
-
-
-
-
-
-
-
-                return NotFound();
+     
+            
+                return responseMsg;
             }
         }
 

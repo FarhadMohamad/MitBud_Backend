@@ -22,6 +22,7 @@ namespace MitBud.Providers
             company.Email = registerViewModel.Email;
             company.ContactPerson = registerViewModel.ContactPerson;
             company.Address = registerViewModel.Address;
+            company.Region = registerViewModel.Region;
             company.PostCode = registerViewModel.PostCode;
             db.Companies.Add(company);
             db.SaveChanges();

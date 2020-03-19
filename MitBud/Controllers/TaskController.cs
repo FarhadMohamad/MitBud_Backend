@@ -23,7 +23,7 @@ namespace MitBud.Controllers
         [System.Web.Http.Route("api/SaveTaskLoggedIn")]
         public async Task<HttpResponseMessage> SaveTaskLoggedIn(TaskViewModel taskViewModel)
         {
-            
+
             var userId = RequestContext.Principal.Identity.GetUserId();
 
             if (userId != null)
@@ -36,7 +36,7 @@ namespace MitBud.Controllers
                     Content = new StringContent("", Encoding.UTF8, "application/json")
                 };
 
-               sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
+                sendVerificationByMail(taskViewModel.ClientEmail, taskViewModel.ClientName);
 
             }
             //else
@@ -46,6 +46,69 @@ namespace MitBud.Controllers
             //    await account.SaveTaskNotLoggedIn(taskViewModel);
             //}
             return Request.CreateResponse(HttpStatusCode.OK);
+
+        }
+
+
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("api/UpdateTaskStatus")]
+        [System.Web.Http.Authorize]
+        public async Task<HttpResponseMessage> TaskStatus(int taskId, int? status)
+        {
+
+            var userId = RequestContext.Principal.Identity.GetUserId();
+
+            if (userId != null)
+            {
+                TaskProvider.SaveTaskStatus(taskId, userId, status);
+
+                var dd = HttpStatusCode.Accepted;
+                var responseMsg = new HttpResponseMessage(dd)
+                {
+                    Content = new StringContent("", Encoding.UTF8, "application/json")
+                };
+
+
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+
+
+        }
+
+        [System.Web.Http.Route("api/GetclientTask")]
+        [System.Web.Http.Authorize]
+        public IHttpActionResult GetClientTask()
+        {
+            
+            IList<TaskViewModel> taskViewModel = null;           
+
+            var CurrentuserId = RequestContext.Principal.Identity.GetUserId();
+
+            using (MitBudDBEntities mitBud = new MitBudDBEntities())
+            {
+                taskViewModel = (from task in mitBud.Tasks
+                              
+                                 where task.Client_id == CurrentuserId
+                                 select new TaskViewModel()
+                                 {
+                                     TaskId = task.TaskId,
+                                     Title = task.Title,
+                                     Description = task.Description,
+                                     ClientStreetName = task.ClientStreetName,
+                                     ClientHouseNumber = task.ClientHouseNumber,
+                                     ClientPostCode = task.ClientPostCode,
+                                     ClientCity = task.ClientCity,
+                                     Region = task.Region,                                
+                                 }).Distinct().ToList();
+
+            }
+            if (taskViewModel.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(taskViewModel);
 
         }
 
@@ -90,60 +153,9 @@ namespace MitBud.Controllers
             }
 
         }
-
-
-
-        [System.Web.Http.Route("api/GetTask")]
-        [System.Web.Http.Authorize]
-        public IHttpActionResult GetTask()
-        {
-            // var mitBud = new MitBudDBEntities();
-
-            IList<CompanyTaskViewModel> companyTaskVM = null;
-
-            //List<string> ITEMS = new List<string>();
-
-            var CurrentuserId = RequestContext.Principal.Identity.GetUserId();
-
-            using (MitBudDBEntities mitBud = new MitBudDBEntities())
-            {
-                companyTaskVM = (from task in mitBud.Tasks
-                                 from Company_Category in mitBud.Company_Category
-                                 where task.Category == Company_Category.Name && Company_Category.CompanyUserId == CurrentuserId
-                                 from Company in mitBud.Companies
-                                 where Company.PostCode == task.ClientPostCode                 
-                                 select  new CompanyTaskViewModel()
-                                 {
-                                     TaskId = task.TaskId,
-                                     Title = task.Title,
-                                     Category = task.Category,
-                                     ClientPostCode = task.ClientPostCode,
-                                     PostCode = Company.PostCode,
-                                     ClientName = task.ClientName,
-                                     Description = task.Description,
-
-
-                                 }).Distinct().ToList();
-
-
-
-            }
-            if (companyTaskVM.Count == 0)
-            {
-                return NotFound();
-            }
-            return Ok(companyTaskVM);
-
-
-
-
-        }
-
-
-
-
     }
 }
+    
 
 
 

@@ -32,6 +32,7 @@ namespace MitBud.DAL
         public Nullable<System.DateTime> Date { get; set; }
         public string DesiredDate { get; set; }
         public byte[] Image { get; set; }
+        public Nullable<int> Status { get; set; }
     
         public virtual Client Client { get; set; }
     }

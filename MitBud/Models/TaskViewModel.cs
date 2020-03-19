@@ -8,7 +8,7 @@ namespace MitBud.Models
     public class TaskViewModel
     {
 
-        //public string  Id { get; set; }
+        public int  TaskId { get; set; }
         public string Title { get; set; }
         //public string Client_id { get; set; }
         public string Description { get; set; }
@@ -26,5 +26,6 @@ namespace MitBud.Models
         public DateTime? Date { get; set; }
         public string DesiredDate { get; set; }
         public byte[] Image { get; set; }
+        public int Status { get; set; } = 0;
     }
 }

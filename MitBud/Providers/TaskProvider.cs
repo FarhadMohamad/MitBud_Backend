@@ -43,6 +43,7 @@ namespace MitBud.Providers
             Task.Date = taskViewModel.Date;
             Task.DesiredDate = taskViewModel.DesiredDate;
             Task.Image = taskViewModel.Image;
+            Task.Status = taskViewModel.Status;
             db.Tasks.Add(Task);
             db.SaveChanges();
 
@@ -74,6 +75,7 @@ namespace MitBud.Providers
             Task.Date = taskViewModel.Date;
             Task.DesiredDate = taskViewModel.DesiredDate;
             Task.Image = taskViewModel.Image;
+            Task.Status = taskViewModel.Status;
             db.Tasks.Add(Task);
             db.SaveChanges();
 
@@ -87,38 +89,51 @@ namespace MitBud.Providers
 
         }
 
+        public static void SaveTaskStatus(int TaskId, string userId, int? status)
+        {
+
+            MitBudDBEntities db = new MitBudDBEntities();
 
 
-        //public static void SendPasswordResetEmail(string ToEmail, string UserName)
-        //{
-        //    // MailMessage class is present is System.Net.Mail namespace
-        //    MailMessage mailMessage = new MailMessage("atmar@hotmail.dk", ToEmail);
+            var findTaskId = db.Tasks.Where(x => x.TaskId == TaskId).SingleOrDefault();
+
+            Task task = new Task();
+            findTaskId.Status = status;
+            db.Tasks.Add(task);
+            db.SaveChanges();
+
+        }
+
+            //public static void SendPasswordResetEmail(string ToEmail, string UserName)
+            //{
+            //    // MailMessage class is present is System.Net.Mail namespace
+            //    MailMessage mailMessage = new MailMessage("atmar@hotmail.dk", ToEmail);
 
 
-        //    // StringBuilder class is present in System.Text namespace
-        //    StringBuilder sbEmailBody = new StringBuilder();
-        //    sbEmailBody.Append("Dear " + UserName + ",<br/><br/>");
-        //    sbEmailBody.Append("Please click on the following link to reset your password");
-        //    sbEmailBody.Append("<br/>"); sbEmailBody.Append("http://localhost/WebApplication1/Registration/ChangePassword.aspx?uid=");
-        //    sbEmailBody.Append("<br/><br/>");
-        //    sbEmailBody.Append("<b>Pragim Technologies</b>");
+            //    // StringBuilder class is present in System.Text namespace
+            //    StringBuilder sbEmailBody = new StringBuilder();
+            //    sbEmailBody.Append("Dear " + UserName + ",<br/><br/>");
+            //    sbEmailBody.Append("Please click on the following link to reset your password");
+            //    sbEmailBody.Append("<br/>"); sbEmailBody.Append("http://localhost/WebApplication1/Registration/ChangePassword.aspx?uid=");
+            //    sbEmailBody.Append("<br/><br/>");
+            //    sbEmailBody.Append("<b>Pragim Technologies</b>");
 
-        //    mailMessage.IsBodyHtml = true;
+            //    mailMessage.IsBodyHtml = true;
 
-        //    mailMessage.Body = sbEmailBody.ToString();
-        //    mailMessage.Subject = "Reset Your Password";
-        //    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            //    mailMessage.Body = sbEmailBody.ToString();
+            //    mailMessage.Subject = "Reset Your Password";
+            //    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
 
-        //    smtpClient.Credentials = new System.Net.NetworkCredential()
-        //    {
-        //        UserName = "atmar@hotmail.dk",
-        //        Password = "mursal1506"
-        //    };
+            //    smtpClient.Credentials = new System.Net.NetworkCredential()
+            //    {
+            //        UserName = "atmar@hotmail.dk",
+            //        Password = "mursal1506"
+            //    };
 
-        //    smtpClient.EnableSsl = true;
-        //    smtpClient.Send(mailMessage);
-        //}
-      
+            //    smtpClient.EnableSsl = true;
+            //    smtpClient.Send(mailMessage);
+            //}
+
         }
 
     }
