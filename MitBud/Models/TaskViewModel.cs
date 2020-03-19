@@ -26,6 +26,6 @@ namespace MitBud.Models
         public DateTime? Date { get; set; }
         public string DesiredDate { get; set; }
         public byte[] Image { get; set; }
-        public int Status { get; set; } = 0;
+        public int? Status { get; set; } = 0;
     }
 }

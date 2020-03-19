@@ -100,7 +100,8 @@ namespace MitBud.Controllers
                                      ClientHouseNumber = task.ClientHouseNumber,
                                      ClientPostCode = task.ClientPostCode,
                                      ClientCity = task.ClientCity,
-                                     Region = task.Region,                                
+                                     Region = task.Region,
+                                     Status = task.Status,
                                  }).Distinct().ToList();
 
             }

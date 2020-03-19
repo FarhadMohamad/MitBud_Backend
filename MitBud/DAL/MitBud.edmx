@@ -133,7 +133,7 @@
           <Property Name="Client_id" Type="nvarchar" MaxLength="128" />
           <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
-          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientPostCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Region" Type="nvarchar" MaxLength="50" />
@@ -471,7 +471,7 @@
           <Property Name="Client_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ClientPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
