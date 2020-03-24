@@ -345,7 +345,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
-    <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\AspNetRole.cs">
@@ -399,6 +399,7 @@
     <Compile Include="DAL\Task.cs">
       <DependentUpon>MitBud.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\Denmark_addressess.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -416,6 +417,8 @@
     <Compile Include="Providers\CompanyProvider.cs" />
     <Compile Include="Providers\TaskProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Services\Email.cs" />
+    <Compile Include="Services\GenerateRandomPassword.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

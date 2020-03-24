@@ -16,7 +16,7 @@ using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-
+using MitBud.Services;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
@@ -464,10 +464,12 @@ namespace MitBud.Controllers
         [System.Web.Http.HttpPost]
         [System.Web.Http.AllowAnonymous]
         [System.Web.Mvc.ValidateAntiForgeryToken]
-        [System.Web.Http.Route("SaveTaskNewUser")]
-        public async Task<IHttpActionResult> SaveTaskNotLoggedIn(TaskViewModel taskViewModel)
+        [System.Web.Http.Route("NotRegisteredUserTask")]
+        public async Task<IHttpActionResult> NotRegisteredUserTask(TaskViewModel taskViewModel)
         {
-            taskViewModel.Region = GetMunicipalityCode(taskViewModel.ClientStreetName, taskViewModel.ClientPostCode.ToString(), taskViewModel.ClientHouseNumber, taskViewModel.ClientCity);
+            
+
+            taskViewModel.Region = Denmark_addressess.GetMunicipalityCode(taskViewModel.ClientStreetName, taskViewModel.ClientPostCode.ToString(), taskViewModel.ClientHouseNumber, taskViewModel.ClientCity);
             
 
             if (!ModelState.IsValid)
@@ -475,7 +477,7 @@ namespace MitBud.Controllers
                 return BadRequest(ModelState);
             }
 
-            var randomPass = GenerateRandomPassword();
+            var randomPass = GenerateRandomPassword.GenerateRandomPass();
             RegisterClient registerClient = new RegisterClient();
             registerClient.Email = taskViewModel.ClientEmail;
             registerClient.Password = randomPass;
@@ -491,7 +493,7 @@ namespace MitBud.Controllers
                 
                 ClientProvider.SaveClientInfo(taskViewModel.ClientName, taskViewModel.ClientEmail, UserId.Id);
 
-                TaskProvider.SaveTaskNotLoggedIn(taskViewModel, UserId.Id);
+                TaskProvider.SaveTaskRegisteredUser(taskViewModel, UserId.Id);
                 UserManager.AddToRole(UserId.Id, "Client");
 
             }
@@ -514,107 +516,18 @@ namespace MitBud.Controllers
 
             string token = await UserManager.GeneratePasswordResetTokenAsync(UserEmail.Id);
 
-            sendCreatePasswordByEmail(taskViewModel.ClientEmail, taskViewModel.ClientName, token);
+           Email.sendCreatePasswordByEmail(taskViewModel.ClientEmail, taskViewModel.ClientName, token);
 
             return Ok();
 
         }
-
-
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.AllowAnonymous]
-        [System.Web.Http.Route("GetMuncipalityCode")]
-        public string GetMunicipalityCode(string address, string postCode, string streetNr, string cityName)
-        {
-
-            //TaskViewModel taskViewModel = new TaskViewModel();
-            string streetName = address;
-            string streetNumber = streetNr;
-            string postNr = postCode;
-            string city = cityName;
-           
-
-            string url = "https://dawa.aws.dk/autocomplete?caretpos=28&fuzzy=&q=" + streetName + " " + streetNr + "," +
-                         " " + postNr + " " + city + "&startfra=adresse&type=adresse";
-            string urlResult = url;
-            string data = "";
-
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-
-            if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                Stream recStream = resp.GetResponseStream();
-                StreamReader readStream = null;
-                if (resp.CharacterSet == null)
-                {
-                    readStream = new StreamReader(recStream);
-                }
-                else
-                {
-                    readStream = new StreamReader(recStream, Encoding.GetEncoding(resp.CharacterSet));
-                }
-
-                data = readStream.ReadToEnd();
-                resp.Close();
-                readStream.Close();
-            }
-
-            List<dynamic> json = JsonConvert.DeserializeObject<List<dynamic>>(data);
-            var test = (string)json[0]["data"]["kommunekode"];
-
-            var regionName = GetRegionName(test);
-            return regionName;
-
-        }
-
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.AllowAnonymous]
-        [System.Web.Http.Route("GetRegionName")]
-        public string GetRegionName(string muncipalityCode)
-        {      
-  
-            string url = "https://dawa.aws.dk/kommuner/" + muncipalityCode;
-            string urlResult = url;
-            string data = "";
-
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-
-            if (resp.StatusCode == HttpStatusCode.OK)
-            {
-                Stream recStream = resp.GetResponseStream();
-                StreamReader readStream = null;
-                if (resp.CharacterSet == null)
-                {
-                    readStream = new StreamReader(recStream);
-                }
-                else
-                {
-                    readStream = new StreamReader(recStream, Encoding.GetEncoding(resp.CharacterSet));
-                }
-
-                data = readStream.ReadToEnd();
-                resp.Close();
-                readStream.Close();
-            }
-
-            var userObj = JObject.Parse(data);
-
-            var userGuid = Convert.ToString(userObj["region"]["navn"]);
-
-            return userGuid;
-
-        }
-
-
 
         // POST: /Account/CreatePassword
         [System.Web.Http.HttpPost]
         [System.Web.Http.AllowAnonymous]
         [System.Web.Mvc.ValidateAntiForgeryToken]
         [System.Web.Http.Route("CreatePassword")]
-        public async Task<IHttpActionResult> CreatePassword(CreatePasswordBindingModel model)
+        public async Task<IHttpActionResult>CreatePassword(CreatePasswordBindingModel model)
         {
 
             MitBudDBEntities mitBudDB = new MitBudDBEntities();
@@ -647,94 +560,8 @@ namespace MitBud.Controllers
 
            return Request.CreateResponse(HttpStatusCode.OK);
         }
-      
-
-        [AllowAnonymous]
-        [Route("sendCreatePasswordByEmail")]
-        public string  sendCreatePasswordByEmail(string ToEmail, string UserName, string token)
-        {
-            try
-            {
-
-                SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
-                var mail = new System.Net.Mail.MailMessage();
-                mail.From = new MailAddress("mitbud@outlook.com");
-                mail.To.Add(ToEmail);
-                mail.Subject = "Your Authorization code.";
-                mail.IsBodyHtml = true;
-                string htmlBody;
-                htmlBody = "Hi " + UserName + "," + "<br />" + "<br />"
-                    + "Please create a password by clicking the following link" + "<br />" + "<br />"
-                    + "http://localhost:60355/api/Account/CreatePassword?token=" + token + "<br />" + "<br />"
-                    + "Regards, " + "<br />"
-                    + "MitBud.";
-                mail.Body = htmlBody;
-                SmtpServer.Port = 587;
-                SmtpServer.UseDefaultCredentials = false;
-                SmtpServer.Credentials = new NetworkCredential("mitbud@outlook.com", "m42929264.", "Outlook.com");
-                SmtpServer.EnableSsl = true;
-                SmtpServer.Send(mail);
-
-                return "sent";
-            }
-            catch (Exception ex)
-            {
-
-                return ex.Message;
-            }
-
-        }
-
-        //Generate a random code for a not logged in user
-        public static string GenerateRandomPassword(Microsoft.AspNetCore.Identity.PasswordOptions opts = null)
-        {
-            if (opts == null) opts = new Microsoft.AspNetCore.Identity.PasswordOptions()
-            {
-                RequiredLength = 8,
-                RequiredUniqueChars = 4,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireNonAlphanumeric = true,
-                RequireUppercase = true
-            };
-
-            string[] randomChars = new[] {
-            "ABCDEFGHJKLMNOPQRSTUVWXYZ",    // uppercase 
-            "abcdefghijkmnopqrstuvwxyz",    // lowercase
-            "0123456789",                   // digits
-            "!@$?_-"                        // non-alphanumeric
-        };
-
-            Random rand = new Random(Environment.TickCount);
-            List<char> chars = new List<char>();
-
-            if (opts.RequireUppercase)
-                chars.Insert(rand.Next(0, chars.Count),
-                    randomChars[0][rand.Next(0, randomChars[0].Length)]);
-
-            if (opts.RequireLowercase)
-                chars.Insert(rand.Next(0, chars.Count),
-                    randomChars[1][rand.Next(0, randomChars[1].Length)]);
-
-            if (opts.RequireDigit)
-                chars.Insert(rand.Next(0, chars.Count),
-                    randomChars[2][rand.Next(0, randomChars[2].Length)]);
-
-            if (opts.RequireNonAlphanumeric)
-                chars.Insert(rand.Next(0, chars.Count),
-                    randomChars[3][rand.Next(0, randomChars[3].Length)]);
-
-            for (int i = chars.Count; i < opts.RequiredLength
-                || chars.Distinct().Count() < opts.RequiredUniqueChars; i++)
-            {
-                string rcs = randomChars[rand.Next(0, randomChars.Length)];
-                chars.Insert(rand.Next(0, chars.Count),
-                    rcs[rand.Next(0, rcs.Length)]);
-            }
-
-            return new string(chars.ToArray());
-        }
-
+            
+              
         #region RegisterExternal
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]

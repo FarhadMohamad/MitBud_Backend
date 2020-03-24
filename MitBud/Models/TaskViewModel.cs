@@ -28,4 +28,21 @@ namespace MitBud.Models
         public byte[] Image { get; set; }
         public int? Status { get; set; } = 0;
     }
+
+    public class GetClientTaskListViewModel
+    {
+
+        public int TaskId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string ClientStreetName { get; set; }
+        public string ClientHouseNumber { get; set; }
+        public string ClientPostCode { get; set; }
+        public string ClientCity { get; set; }
+        public string Region { get; set; }
+        public int? Status { get; set; } = 0;
+
+        
+    }
+    
 }

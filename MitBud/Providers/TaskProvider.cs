@@ -12,6 +12,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Web.Routing;
 using System.Net;
+using MitBud.Services;
 
 namespace MitBud.Providers
 {
@@ -20,10 +21,10 @@ namespace MitBud.Providers
 
 
         //Save Tasks to the database to the Tasks table
-        public static void SaveTaskLoggedIn(TaskViewModel taskViewModel, string userId)
+        public static void SaveTaskForLoggedInUser(TaskViewModel taskViewModel, string userId)
         {
-            AccountController accountController = new AccountController();
-            var regionName = accountController.GetMunicipalityCode(taskViewModel.ClientStreetName, taskViewModel.ClientPostCode.ToString(), taskViewModel.ClientHouseNumber, taskViewModel.ClientCity);
+            
+            var regionName = Denmark_addressess.GetMunicipalityCode(taskViewModel.ClientStreetName, taskViewModel.ClientPostCode.ToString(), taskViewModel.ClientHouseNumber, taskViewModel.ClientCity);
             MitBudDBEntities db = new MitBudDBEntities();
             Task Task = new Task();
             Task.Title = taskViewModel.Title;
@@ -52,7 +53,7 @@ namespace MitBud.Providers
 
 
         //Save Task to the database in the Tasks table
-        public static void SaveTaskNotLoggedIn(TaskViewModel taskViewModel, string userId)
+        public static void SaveTaskRegisteredUser(TaskViewModel taskViewModel, string userId)
         {
 
 
@@ -97,9 +98,9 @@ namespace MitBud.Providers
 
             var findTaskId = db.Tasks.Where(x => x.TaskId == TaskId).SingleOrDefault();
 
-            Task task = new Task();
+            //Task task = new Task();
             findTaskId.Status = status;
-            db.Tasks.Add(task);
+           // db.Tasks.Add(task);
             db.SaveChanges();
 
         }

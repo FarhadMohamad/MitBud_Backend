@@ -7,8 +7,8 @@ namespace MitBud.Models
 {
     public class ConversationViewModel
     {
-        public int TaskID { get; set; }
-        public string Company_Id { get; set; }
+        public int? TaskID { get; set; }
+        public string Company_id { get; set; }
         public string Client_id { get; set; }
         public string Message { get; set; }
     }
