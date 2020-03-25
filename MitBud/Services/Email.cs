@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Http;
+using MitBud.Models;
 namespace MitBud.Services
 {
     public class Email
@@ -126,5 +127,95 @@ namespace MitBud.Services
             }
 
         }
-    }
+
+        public static string sendEmailToAdmin(RegisterCompany register)
+        { 
+ 
+            try
+            {
+
+                SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
+                var mail = new System.Net.Mail.MailMessage();
+                mail.From = new MailAddress("mitbud@outlook.com");
+                mail.To.Add("farh0276@stud.kea.dk");
+                mail.Subject = "Registration request from " + register.Name;
+                mail.IsBodyHtml = true;
+                string htmlBody;
+
+                htmlBody = "Hi " + "Roohullah Jan" + "," + "<br />" + "<br />"
+                    + "The following company wants to register:" + "<br />" + "<br />"
+                    + "Name = " + register.Name + "," + "<br />"
+                   + "CompanyName = " + register.CompanyName + "," + "<br />" 
+                   + "CompanySize = " + register.CompanySize + "," + "<br />"
+                   + "Telephone = " + register.Telephone + "," + "<br />"
+                    + "Category = " + register.Category + "," + "<br />" 
+                   + "Address = " + register.Address + "," + "<br />" 
+                    + "Region = " + register.Region + "," + "<br />" 
+                     + "PostCode = " + register.PostCode + "," + "<br />"
+                      + "City = " + register.City + "," + "<br />"
+                      + "CVR = " + register.CVR + "," + "<br />" 
+                   + "ContactPerson = " + register.ContactPerson + "," + "<br />"
+                   + "Email = " + register.Email + "," + "<br />" 
+                    + "Password = " + register.Password + "," + "<br />" 
+                     + "ConfirmPassword = " + register.ConfirmPassword + "," + "<br />" + "<br />"
+                      + "Regards," + "<br />"
+                + "MitBud.";
+                mail.Body = htmlBody;
+                SmtpServer.Port = 587;
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Credentials = new NetworkCredential("mitbud@outlook.com", "m42929264.", "Outlook.com");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+
+
+                sendVerificationToCompany(register.Email, register.Name);
+
+
+                return "sent";
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+     
+       
+
+        }
+        public static string sendVerificationToCompany(string companyEmail, string name)
+        {
+
+
+            try
+            {
+
+                SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
+                var mail = new System.Net.Mail.MailMessage();
+                mail.From = new MailAddress("mitbud@Outlook.com");
+                mail.To.Add(companyEmail);
+                mail.Subject = "Approval required";
+                mail.IsBodyHtml = true;
+                string htmlBody;
+                htmlBody = "Hi " + name + "," + "<br />" + "<br />"
+                    + "This is an automatically generated email only to notify you that we will contact you as soon as possible – please do not reply to it." + "<br />" + "<br />"
+                    + "Regards, " + "<br />"
+                    + "MitBud.";
+                mail.Body = htmlBody;
+                SmtpServer.Port = 587;
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Credentials = new NetworkCredential("mitbud@outlook.com", "m42929264.", "Outlook.com");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+
+                return "sent";
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+        }
+}
 }
