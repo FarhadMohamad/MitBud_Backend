@@ -137,7 +137,7 @@ namespace MitBud.Services
                 SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
                 var mail = new System.Net.Mail.MailMessage();
                 mail.From = new MailAddress("mitbud@outlook.com");
-                mail.To.Add("farh0276@stud.kea.dk");
+                mail.To.Add("roohullahhasani@gmail.com");
                 mail.Subject = "Registration request from " + register.Name;
                 mail.IsBodyHtml = true;
                 string htmlBody;

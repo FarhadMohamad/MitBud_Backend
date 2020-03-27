@@ -31,17 +31,17 @@ namespace MitBud.Controllers
             using (MitBudDBEntities mitBud = new MitBudDBEntities())
             {
                 companyTaskVM = (from task in mitBud.Tasks
-                                 from Company_Category in mitBud.Company_Category
-                                 where task.Category == Company_Category.Name && Company_Category.CompanyUserId == CurrentuserId
-                                 from Company in mitBud.Companies
-                                 where Company.Region == task.Region
+                                 join c in mitBud.Companies on task.Region equals c.Region
+
+                                 where c.Company_Category.Select(x => x.Name).ToList().Contains(task.Category) && c.Company_Category.Select(x => x.CompanyUserId).Contains(CurrentuserId)
+                                 
                                  select new CompanyTaskViewModel()
                                  {
                                      TaskId = task.TaskId,
                                      Title = task.Title,
                                      Category = task.Category,
                                      ClientPostCode = task.ClientPostCode,
-                                     Region = Company.Region,
+                                     Region = task.Region,
                                      ClientName = task.ClientName,
                                      Description = task.Description,
 

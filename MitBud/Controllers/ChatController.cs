@@ -47,7 +47,7 @@ namespace MitBud.Controllers
                 Content = new StringContent("", Encoding.UTF8, "application/json")
             };
          
-
+           
            Email.sendNotificationEmail(clientId.ClientName, clientId.ClientEmail, CompanyEmail.CompanyName);
             return responseMsg;
         }
