@@ -96,6 +96,7 @@
           <Property Name="Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Region" Type="nvarchar" MaxLength="50" />
           <Property Name="PostCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyCredit" Type="int" />
         </EntityType>
         <EntityType Name="Company_Category">
           <Key>
@@ -431,6 +432,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Company_AspNetUsers" FromRole="Company" ToRole="AspNetUsers" />
           <NavigationProperty Name="Company_Category" Relationship="Self.FK_Category_Company" FromRole="Company" ToRole="Company_Category" />
           <NavigationProperty Name="Conversations" Relationship="Self.FK_Conversation_Company" FromRole="Company" ToRole="Conversation" />
+          <Property Name="CompanyCredit" Type="Int32" />
         </EntityType>
         <EntityType Name="Company_Category">
           <Key>
@@ -723,6 +725,7 @@
           <EntitySetMapping Name="Companies">
             <EntityTypeMapping TypeName="MitBudDBModel.Company">
               <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyCredit" ColumnName="CompanyCredit" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="CompanySize" ColumnName="CompanySize" />

@@ -18,4 +18,11 @@ namespace MitBud.Models
 
       
     }
+    public class Credit
+    {
+        public int companyCredit { get; set; }
+     
+
+
+    }
 }

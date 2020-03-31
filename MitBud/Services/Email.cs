@@ -148,7 +148,7 @@ namespace MitBud.Services
                    + "CompanyName = " + register.CompanyName + "," + "<br />" 
                    + "CompanySize = " + register.CompanySize + "," + "<br />"
                    + "Telephone = " + register.Telephone + "," + "<br />"
-                    + "Category = " + register.Category + "," + "<br />" 
+                    + "Category = " + register.category + "," + "<br />" 
                    + "Address = " + register.Address + "," + "<br />" 
                     + "Region = " + register.Region + "," + "<br />" 
                      + "PostCode = " + register.PostCode + "," + "<br />"

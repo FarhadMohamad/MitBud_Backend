@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
@@ -144,7 +145,7 @@ namespace MitBud.Models
         public string CompanyName { get; set; }
         public string CompanySize { get; set; }
         public string Telephone { get; set; }
-        public string Category { get; set; }
+        public List<string> category { get; set; }
         public string City { get; set; }
         public string CVR { get; set; }
         public string ContactPerson { get; set; }

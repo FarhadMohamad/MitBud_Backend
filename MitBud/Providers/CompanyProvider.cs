@@ -32,13 +32,37 @@ namespace MitBud.Providers
 
         public static void SaveCategory(RegisterCompany registerViewModel, string UserId)
         {
-            MitBudDBEntities db = new MitBudDBEntities();
-            Company_Category company_category = new Company_Category();
-            company_category.CompanyUserId = UserId;
-            company_category.Name = registerViewModel.Category;
           
-            db.Company_Category.Add(company_category);
-            db.SaveChanges();
+            
+         
+
+            foreach (var item in registerViewModel.category)
+            {
+                MitBudDBEntities db = new MitBudDBEntities();
+                Company_Category company_category = new Company_Category();
+                company_category.CompanyUserId = UserId;
+                company_category.Name = item;
+
+                db.Company_Category.Add(company_category);
+                db.SaveChanges();
+            }
+
+
+                                  
+        }
+        public static void updateCredit(int? credit, string UserId)
+        {
+
+
+
+                 MitBudDBEntities db = new MitBudDBEntities();
+            //Company company = new Company();
+                var findCompanyCredit = db.Companies.Where(x => x.UserId == UserId).SingleOrDefault();
+
+                 findCompanyCredit.CompanyCredit = credit;
+                db.SaveChanges();
+            
+
 
 
         }
